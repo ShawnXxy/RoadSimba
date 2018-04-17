@@ -1,3 +1,4 @@
+```
 RoadSimba
     |
     | --- index.php (//home page)
@@ -51,3 +52,4 @@ RoadSimba
                         | --- header.php
                         | --- footer.php
                         | --- navigation.php
+```
