@@ -15,7 +15,6 @@
         $lastname = $row['lastname'];
         $email = $row['email'];
         $phone = $row['phone'];
-        // $role = $row['role'];
         $mc_num = $row['mc_num'];
     }
 
@@ -23,8 +22,7 @@
         $email = mysqli_real_escape_string($con, $_POST['email']);
         $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
         $lastname = mysqli_real_escape_string($con, $_POST['lastname']);
-        $phone = mysqli_real_escape_string($con, $_POST['phone']);
-        $role = $_POST['role'];                     
+        $phone = mysqli_real_escape_string($con, $_POST['phone']);                  
         $mc_num = mysqli_real_escape_string($con, $_POST['mc_num']);      
 
         $sql_update_dispatcher = "UPDATE $table_users SET 
@@ -32,7 +30,6 @@
             firstname = '$firstname', 
             lastname = '$lastname', 
             phone = '$phone',
-            -- role = '$role',
             mc_num = '$mc_num'
             WHERE user_ID = $edit_user_id;
             ";

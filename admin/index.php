@@ -30,6 +30,7 @@
             <!-- /.row -->
 
             <div class="row">
+
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -48,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="posts.php">
+                        <a href="loads.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -58,6 +59,7 @@
                     </div>
                 </div>
                 
+                <?php if ($_SESSION['role'] == 1) { ?>
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-yellow">
                         <div class="panel-heading">
@@ -67,12 +69,97 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <?php
-                                        $sql = "SELECT * FROM $table_users;";
+                                        $sql = "SELECT * FROM $table_users WHERE role = 0;";
                                         $query = mysqli_query($con, $sql);
                                         $users_counts = mysqli_num_rows($query);
                                         echo "<div class='huge'>$users_counts</div>";
                                     ?>
                                     <div> Fleets</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="fleets.php">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <?php } ?>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-user fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <?php
+                                        $sql = "SELECT * FROM $table_users WHERE role = 1;";
+                                        $query = mysqli_query($con, $sql);
+                                        $users_counts = mysqli_num_rows($query);
+                                        echo "<div class='huge'>$users_counts</div>";
+                                    ?>
+                                    <div> Dispatchers</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="dispatchers.php">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-user fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <?php
+                                        $sql = "SELECT * FROM $table_users WHERE role = 2;";
+                                        $query = mysqli_query($con, $sql);
+                                        $users_counts = mysqli_num_rows($query);
+                                        echo "<div class='huge'>$users_counts</div>";
+                                    ?>
+                                    <div> Brokers</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="users.php">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-user fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <?php
+                                        $sql = "SELECT * FROM $table_users WHERE role = 3;";
+                                        $query = mysqli_query($con, $sql);
+                                        $users_counts = mysqli_num_rows($query);
+                                        echo "<div class='huge'>$users_counts</div>";
+                                    ?>
+                                    <div> Shippers</div>
                                 </div>
                             </div>
                         </div>
@@ -121,22 +208,20 @@
                             <?php
                                 $element_title = [
                                     'Active Loads',
-                                    'Total Users',
                                     'Carriers',
-                                    'Brokers',
                                     'Dispatchers',
+                                    'Brokers',
                                     'Shippers'
                                 ];
                                 $element_count = [
                                     $loads_counts,
-                                    $users_counts,
                                     $carriers_counts,
-                                    $shippers_counts,
+                                    $dispatchers_counts,
                                     $brokers_counts,
-                                    $dispatchers_counts
+                                    $shippers_counts
                                 ];
 
-                                for ($i = 0; $i < 6; $i++) {
+                                for ($i = 0; $i < 5; $i++) {
                                     echo "['$element_title[$i]'" . ", " . "$element_count[$i]],";
                                 }
                             ?>
@@ -144,7 +229,7 @@
 
                         var options = {
                             chart: {
-                                title: 'RoadSimba CMS',
+                                title: 'RoadSimba',
                                 subtitle: 'Admin Dashboard',
                             }
                         };

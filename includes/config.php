@@ -1,50 +1,50 @@
 <?php
     /********************************
-     * 
+     *
      *  Config database
-     * 
+     *
      *********************************/
-    DEFINE('DB_USERNAME', 'root');
-    DEFINE('DB_PASSWORD', 'root');
-    DEFINE('DB_HOST', 'localhost');
+    DEFINE('DB_USERNAME', 'shawnxxy');
+    DEFINE('DB_PASSWORD', 'XXy@4592995');
+    DEFINE('DB_HOST', '107.180.12.114');
     DEFINE('DB_DATABASE', 'roadsimba');
- 
+
     $db = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
     /*****************************
-     * 
+     *
      * Create table
-     * 
+     *
      *********************************/
-    
+
     $table_users = 'users';
     $table_loads = 'loads';
     $table_orders = 'orders';
     $table_vehicles = 'vehicles';
     $table_disp_carr = 'dispcarr';
-    
+
     // USERS
     $sql = "CREATE TABLE IF NOT EXISTS $table_users (
         user_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(64) NOT NULL UNIQUE,
-        password VARCHAR(64) NOT NULL,
+        password VARCHAR(64),
         firstname VARCHAR(48) NOT NULL,
         lastname VARCHAR(48) NOT NULL,
         phone VARCHAR(32) NOT NULL,
         role INT(3) NOT NULL,
-        mc_num VARCHAR(15) NOT NULL,
-        date_registration INT(11) 
+        mc_num VARCHAR(15),
+        date_registration INT(11)
     );";
     mysqli_query($db, $sql);
 
     // loads
     $sql = "CREATE TABLE IF NOT EXISTS $table_loads (
-        load_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+        load_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         post_by_ID INT(11) NOT NULL,
         date_post INT(11) NOT NULL,
         date_exp INT(11) NOT NULL,
-        date_pickup INT(11) NOT NULL, 
-        date_delivery INT(11) NOT NULL, 
+        date_pickup INT(11) NOT NULL,
+        date_delivery INT(11) NOT NULL,
         addr_pickup VARCHAR(255) NOT NULL,
         city_pickup VARCHAR(11) NOT NULL,
         state_pickup VARCHAR(11) NOT NULL,
@@ -67,7 +67,7 @@
 
     // vehicles
     $sql = "CREATE TABLE IF NOT EXISTS $table_vehicles (
-        v_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,  
+        v_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         user_ID INT(11) NOT NULL,
         size INT(8) NOT NULL
     );";
@@ -75,7 +75,7 @@
 
     // orders
     $sql = "CREATE TABLE IF NOT EXISTS $table_orders (
-        order_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+        order_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         load_ID INT(11) NOT NULL,
         dispatcher_ID INT(11) NOT NULL,
         carrier_ID INT(11) NOT NULL,
@@ -96,9 +96,9 @@
     mysqli_query($db, $sql);
 
     /*************************************
-     * 
+     *
      *  Connect to database
-     * 
+     *
      ***********************************/
     // ob_start();
     $con = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);

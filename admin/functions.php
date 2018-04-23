@@ -1,8 +1,8 @@
 <?php
     /******************
-     * 
-     * Orders 
-     * 
+     *
+     * Loads
+     *
      ********************/
     function view_loads() {
         global $con;
@@ -54,8 +54,8 @@
                 $post_by = $row['firstname'] . " " . $row['lastname'] . " / " . $row['email'];
                 echo "<td>$post_by</td>";
             }
-            
-            echo "<td>$date_post" . " - " . "$date_exp</td>";            
+
+            echo "<td>$date_post" . " - " . "$date_exp</td>";
             echo "<td>$date_pickup" . " - " . "$date_delivery</td>";
             echo "<td>$addr_pickup" . ", " . "$city_pickup" . ", " . "$state_pickup" . " " . "$zip_pickup</td>";
             echo "<td>$addr_delivery" . ", " . "$city_delivery" . ", " . "$state_delivery" . " " . "$zip_delivery</td>";
@@ -103,48 +103,48 @@
             $budget = mysqli_real_escape_string($con, $_POST['budget']);
 
             $note = mysqli_real_escape_string($con, $_POST['note']);
-    
+
             $sql = "INSERT INTO $table_loads (
-                post_by_ID, 
-                date_post, 
-                date_exp, 
-                date_pickup, 
-                date_delivery, 
-                addr_pickup, 
+                post_by_ID,
+                date_post,
+                date_exp,
+                date_pickup,
+                date_delivery,
+                addr_pickup,
                 city_pickup,
                 state_pickup,
                 zip_pickup,
-                addr_delivery, 
-                city_delivery, 
-                state_delivery, 
-                zip_delivery, 
+                addr_delivery,
+                city_delivery,
+                state_delivery,
+                zip_delivery,
                 load_type,
                 vehicle_size,
-                miles, 
-                pieces, 
+                miles,
+                pieces,
                 load_weight,
                 budget,
                 note
                 ) VALUES (
-                    '$post_by', 
+                    '$post_by',
                     ".time().",
-                    '$date_exp', 
-                    '$date_pickup', 
-                    '$date_delivery', 
-                    '$addr_pickup', 
-                    '$city_pickup', 
+                    '$date_exp',
+                    '$date_pickup',
+                    '$date_delivery',
+                    '$addr_pickup',
+                    '$city_pickup',
                     '$state_pickup',
-                    '$zip_pickup', 
-                    '$addr_delivery', 
-                    '$city_delivery', 
-                    '$state_delivery', 
-                    '$zip_delivery', 
+                    '$zip_pickup',
+                    '$addr_delivery',
+                    '$city_delivery',
+                    '$state_delivery',
+                    '$zip_delivery',
                     '$load_type',
-                    '$vehicle_size', 
-                    '$miles', 
-                    '$pieces', 
-                    '$load_weight', 
-                    '$budget', 
+                    '$vehicle_size',
+                    '$miles',
+                    '$pieces',
+                    '$load_weight',
+                    '$budget',
                     '$note'
                     );";
             $query = mysqli_query($con, $sql);
@@ -153,7 +153,7 @@
             } else {
                 echo "<p class='bg-success'>Load posted successfully! <a href='loads.php'>View Orders</a></p>";
             }
-            
+
         }
     }
 
@@ -173,18 +173,20 @@
         }
     }
 
-    
+
     /******************
-     * 
-     * Fleets 
-     * 
+     *
+     * Fleets
+     *
      ********************/
     function load_fleets() {
         global $con;
         global $table_users;
         global $table_vehicles;
+        global $table_disp_carr;
 
-        $sql = "SELECT * FROM $table_users;";
+        $cur_user_ID = $_SESSION['user_ID'];
+        $sql = "SELECT * FROM $table_users JOIN $table_disp_carr ON carrier_ID = $table_users.user_ID WHERE  role = 0 AND dispatcher_ID = $cur_user_ID;";
         $query = mysqli_query($con, $sql);
 
         while ($row = mysqli_fetch_assoc($query)) {
@@ -224,44 +226,61 @@
         global $con;
         global $table_users;
         global $table_vehicles;
+        global $table_disp_carr;
 
         if (isset($_POST['create_fleet'])) {
             $email = mysqli_real_escape_string($con, $_POST['email']);
             $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
             $lastname = mysqli_real_escape_string($con, $_POST['lastname']);
             $phone = mysqli_real_escape_string($con, $_POST['phone']);
-            // $role = $_POST['role'];           
-            
+
             $vehicle_size = mysqli_real_escape_string($con, $_POST['size']);
-                       
+
+            // Store carriers/fleet into users table
             $sql_u = "INSERT INTO $table_users (
                 email,
                 firstname,
                 lastname,
-                phone
+                phone,
+                role
                 ) VALUES (
-                    '$email', 
-                    '$firstname', 
-                    '$lastname', 
-                    '$phone'
+                    '$email',
+                    '$firstname',
+                    '$lastname',
+                    '$phone',
+                    0
                     );";
             $query_u = mysqli_query($con, $sql_u);
 
+            $carrier_ID = mysqli_insert_id($con);
+
+            // Store info into vehicles table
             $sql_v = "INSERT INTO $table_vehicles (
                 user_ID,
                 size
                 ) VALUES (
-                    '$email', 
-                    '$vehicle_size'
+                    $carrier_ID,
+                    $vehicle_size
                     );";
             $query_v = mysqli_query($con, $sql_v);
-            
-            if (!$query_u || !$query_v) {
+
+            // Store info into dispcarr table
+            $dispatcher_ID = $_SESSION['user_ID'];
+            $sql_dc = "INSERT INTO $table_disp_carr (
+                dispatcher_ID,
+                carrier_ID
+                ) VALUES (
+                    $dispatcher_ID,
+                    $carrier_ID
+                    );";
+            $query_dc = mysqli_query($con, $sql_dc);
+
+            if (!$query_u || !$query_v || !$query_dc) {
                 die("Query failed!" . mysqli_error($con));
             } else {
                 echo "<p class='bg-success'>Added successfully! <a href='fleets.php'>View Fleets</a></p>";
             }
-            
+
         }
     }
 
@@ -281,11 +300,10 @@
         }
     }
 
-
 /******************
-     * 
-     * DISPATCHERS 
-     * 
+     *
+     * DISPATCHERS
+     *
      ********************/
 
     function add_dispatcher() {
@@ -297,9 +315,9 @@
             $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
             $lastname = mysqli_real_escape_string($con, $_POST['lastname']);
             $phone = mysqli_real_escape_string($con, $_POST['phone']);
-            // $role = $_POST['role'];                     
+            // $role = $_POST['role'];
             $mc_num = mysqli_real_escape_string($con, $_POST['mc_num']);
-                       
+
             $sql = "INSERT INTO $table_users (
                 email,
                 firstname,
@@ -308,9 +326,9 @@
                 role,
                 mc_num
                 ) VALUES (
-                    '$email', 
-                    '$firstname', 
-                    '$lastname', 
+                    '$email',
+                    '$firstname',
+                    '$lastname',
                     '$phone',
                     1,
                     '$mc_num'
@@ -321,7 +339,7 @@
             } else {
                 echo "<p class='bg-success'>Added successfully! <a href='dispatchers.php'>View Dispatchers</a></p>";
             }
-            
+
         }
     }
 
