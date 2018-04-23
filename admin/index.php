@@ -89,21 +89,26 @@
 
             <!-- Google Charts -->
             <?php
-                $sql = "SELECT * FROM $table_users WHERE role = 2;";
-                $query = mysqli_query($con, $sql);
-                $brokers_counts = mysqli_num_rows($query);
-
+                // Carriers
                 $sql = "SELECT * FROM $table_users WHERE role = 0;";
                 $query = mysqli_query($con, $sql);
                 $carriers_counts = mysqli_num_rows($query);
 
-                $sql = "SELECT * FROM $table_users WHERE role = 3;";
-                $query = mysqli_query($con, $sql);
-                $shippers_counts = mysqli_num_rows($query);
-
+                // Dispatchers
                 $sql = "SELECT * FROM $table_users WHERE role = 1;";
                 $query = mysqli_query($con, $sql);
                 $dispatchers_counts = mysqli_num_rows($query);
+
+                // Brokers
+                $sql = "SELECT * FROM $table_users WHERE role = 2;";
+                $query = mysqli_query($con, $sql);
+                $brokers_counts = mysqli_num_rows($query);
+
+                // Shippers
+                $sql = "SELECT * FROM $table_users WHERE role = 3;";
+                $query = mysqli_query($con, $sql);
+                $shippers_counts = mysqli_num_rows($query);
+              
             ?>
             <div class="row">
                 <script type="text/javascript">

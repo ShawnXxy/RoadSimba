@@ -21,24 +21,28 @@
                         Welcome, 
                         <small><?php echo $_SESSION['firstname']; ?></small> !
                         <br>
-                        <small>Please enroll your dispatchers below.</small>
+                        <small>Information about your dispatchers.</small>
                     </h1>
                     <?php
-                        if (isset($_GET['source'])) {
-                            $source = $_GET['source'];
+                        if ($_SESSION['role'] == 0) {
+                            if (isset($_GET['source'])) {
+                                $source = $_GET['source'];
+                            } else {
+                                $source = '';
+                            }
+                            switch($source) {
+                                case 'add_dispatcher':
+                                    include 'includes/add_dispatcher.php';
+                                    break;
+                                case 'edit_dispatcher':
+                                    include 'includes/edit_dispatcher.php';
+                                    break;                       
+                                default:
+                                    include 'includes/all_dispatchers.php';
+                                    break;
+                            }
                         } else {
-                            $source = '';
-                        }
-                        switch($source) {
-                            case 'add_dispatcher':
-                                include 'includes/add_dispatcher.php';
-                                break;
-                            case 'edit_dispatcher':
-                                include 'includes/edit_dispatcher.php';
-                                break;                       
-                            default:
-                                include 'includes/all_dispatchers.php';
-                                break;
+                            echo "<p class='bg-warning'> You cannot access this session!</p>";
                         }
                     ?>
                 </div>

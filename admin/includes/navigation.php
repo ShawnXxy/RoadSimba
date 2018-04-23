@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">RoadSimba CMS Admin</a>
+                <a class="navbar-brand" href="index.php">RoadSimba Admin</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -79,11 +79,17 @@
                             <li>
                                 <a href="./loads.php">View All Loads</a>
                             </li>
+                            <!-- ONly a broker/shipper can add loads -->
+                            <?php if ($_SESSION['role'] == 2 || $_SESSION['role'] == 3) { ?>
                             <li>
                                 <a href="loads.php?source=add_load">Add Load</a>
                             </li>
+                            <?php } ?>
                         </ul>
                     </li>
+
+                    <!-- Only show following menu to Dispatchers (role == 1)-->
+                    <?php if($_SESSION['role'] == 1) { ?>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#fleet-dropdown"><i class="fa fa-fw fa-arrows-v"></i> Fleets<i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="fleet-dropdown" class="collapse">
@@ -95,6 +101,10 @@
                             </li>
                         </ul>
                     </li>
+                    <?php } ?>
+                    
+                    <!-- Only show following menu to Carriers (role == 0)-->
+                    <?php if ($_SESSION['role'] == 0) {?>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#dispatcher-dropdown"><i class="fa fa-fw fa-arrows-v"></i> Dispatchers<i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="dispatcher-dropdown" class="collapse">
@@ -109,6 +119,8 @@
                     <li class="active">
                         <a href="./profile.php"><i class="fa fa-fw fa-file"></i> Profile</a>
                     </li>
+                    <?php } ?>
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

@@ -11,11 +11,10 @@
 
     while ($row = mysqli_fetch_assoc($query)) {
         $edit_load_id = $row['load_ID'];
-        $post_by_id = $row['post_by_ID'];
-        $date_post = $row['date_post'];
-        $date_exp = $row['date_exp'];
-        $date_pickup = $row['date_pickup'];
-        $date_delivery = $row['date_delivery'];
+        $date_post = date("Y-m-d\TH:i:s\Z", $row['date_post']);
+        $date_exp = date("Y-m-d\TH:i:s\Z", $row['date_exp']);
+        $date_pickup = date("Y-m-d\TH:i:s\Z", $row['date_pickup']);
+        $date_delivery = date("Y-m-d\TH:i:s\Z", $row['date_delivery']);
         $addr_pickup = $row['addr_pickup'];
         $city_pickup = $row['city_pickup'];
         $state_pickup = $row['state_pickup'];
@@ -34,10 +33,10 @@
     }
 
     if (isset($_POST['edit_load'])) {
-        $date_exp = mysqli_real_escape_string($con, $_POST['date_exp']);
+        $date_exp = strtotime(mysqli_real_escape_string($con, $_POST['date_exp']));
 
-        $date_pickup = mysqli_real_escape_string($con, $_POST['date_pickup']);
-        $date_delivery = mysqli_real_escape_string($con, $_POST['date_delivery']);
+        $date_pickup = strtotime(mysqli_real_escape_string($con, $_POST['date_pickup']));
+        $date_delivery = strtotime(mysqli_real_escape_string($con, $_POST['date_delivery']));
 
         $addr_pickup = mysqli_real_escape_string($con, $_POST['addr_pickup']);
         $city_pickup = mysqli_real_escape_string($con, $_POST['city_pickup']);
@@ -95,13 +94,14 @@
     </div> -->
 
     <div class="form-group">
-        <label for="date_exp">Date Expired</label>
+        <label for="date_exp">Date Expired (YYYY-MM-DD hh:mm)</label>
         <input type="text" class="form-control" name="date_exp" value="<?php echo $date_exp; ?>">
     </div>
 
     <div class="form-group">
-        <!-- <label for="date">Date</label> -->
+        <label for="date_pickup">Pick Up (YYYY-MM-DD hh:mm)</label>
         <input type="text" class="form-control" name="date_pickup" value="<?php echo $date_pickup; ?>" required>
+        <label for="date_delivery">Delivery (YYYY-MM-DD hh:mm)</label>
         <input type="text" class="form-control" name="date_delivery" value="<?php echo $date_delivery; ?>" required>
     </div>
 

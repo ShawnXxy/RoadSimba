@@ -9,13 +9,14 @@
 
     <div class="form-group">
         <label for="date_exp">Date Expired</label>
-        <input type="text" class="form-control" name="date_exp">
+        <input type="text" class="form-control" name="date_exp" placeholder="YYYY-MM-DD hh:mm">
     </div>
 
     <div class="form-group">
-        <!-- <label for="date">Date</label> -->
-        <input type="text" class="form-control" name="date_pickup" placeholder="Pickup Date" required>
-        <input type="text" class="form-control" name="date_delivery" placeholder="Delivery Date" required>
+        <label for="date_pickup">Pick Up</label>
+        <input type="text" class="form-control" name="date_pickup" placeholder="YYYY-MM-DD hh:mm" required>
+        <label for="date_delivery">Delivery</label>
+        <input type="text" class="form-control" name="date_delivery" placeholder="YYYY-MM-DD hh:mm" required>
     </div>
 
     <div class="form-group">

@@ -15,7 +15,7 @@
         $lastname = $row['lastname'];
         $email = $row['email'];
         $phone = $row['phone'];
-        $role = $row['role'];
+        // $role = $row['role'];
         $mc_num = $row['mc_num'];
     }
 
@@ -32,7 +32,7 @@
             firstname = '$firstname', 
             lastname = '$lastname', 
             phone = '$phone',
-            role = '$role',
+            -- role = '$role',
             mc_num = '$mc_num'
             WHERE user_ID = $edit_user_id;
             ";
@@ -71,7 +71,7 @@
         <input type="text" class="form-control" name="mc_num" value="<?php echo $mc_num; ?>">
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="role">Role *</label>
         <select name="role" required>
             <option value="1">Select Role</option>
@@ -80,7 +80,7 @@
             <option value="2">Broker</option>
             <option value="3">Shipper</option>
         </select>
-    </div>
+    </div> -->
 
     <div class="form-group">
         <input type="submit" class="btn btn-success" name="edit_dispatcher" value="Confirm">

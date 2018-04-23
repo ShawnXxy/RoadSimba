@@ -9,16 +9,26 @@
         global $table_loads;
         global $table_users;
 
-        $sql = "SELECT * FROM $table_loads ORDER BY date_post DESC;";
-        $query = mysqli_query($con, $sql);
+        // Showing all loads to Dispatchers
+        if ($_SESSION['role'] == 1 || $_SESSION['role'] == 0) {
+            $sql = "SELECT * FROM $table_loads ORDER BY date_post DESC;";
+            $query = mysqli_query($con, $sql);
+        }
+
+        // Showing only loads to Brokers/Shippers posted
+        if ($_SESSION['role'] == 2 || $_SESSION['role'] == 3) {
+            $cur_user_ID = $_SESSION['user_ID'];
+            $sql = "SELECT * FROM $table_loads WHERE post_by_ID = $cur_user_ID ORDER BY date_post DESC;";
+            $query = mysqli_query($con, $sql);
+        }
 
         while ($row = mysqli_fetch_assoc($query)) {
             $load_id = $row['load_ID'];
             $post_by_id = $row['post_by_ID'];
-            $date_post = $row['date_post'];
-            $date_exp = $row['date_exp'];
-            $date_pickup = $row['date_pickup'];
-            $date_delivery = $row['date_delivery'];
+            $date_post = date("Y-m-d\TH:i:s\Z", $row['date_post']);
+            $date_exp = date("Y-m-d\TH:i:s\Z", $row['date_exp']);
+            $date_pickup = date("Y-m-d\TH:i:s\Z", $row['date_pickup']);
+            $date_delivery = date("Y-m-d\TH:i:s\Z", $row['date_delivery']);
             $addr_pickup = $row['addr_pickup'];
             $city_pickup = $row['city_pickup'];
             $state_pickup = $row['state_pickup'];
@@ -38,14 +48,13 @@
             echo "<tr>";
             echo "<td>$load_id</td>";
 
-            // $sql_u = "SELECT * FROM $table_users WHERE user_ID = $post_by_id;";
-            // $query_u = mysqli_query($con, $sql_u);
-            // while ($row = mysqli_fetch_assoc($query_u)) {
-            //     $post_by = $row['firstname'] . " " . $row['lastname'] . " / " . $row['email'];
-            //     echo "<td>$post_by</td>";
-            // }
+            $sql_u = "SELECT * FROM $table_users WHERE user_ID = $post_by_id;";
+            $query_u = mysqli_query($con, $sql_u);
+            while ($row = mysqli_fetch_assoc($query_u)) {
+                $post_by = $row['firstname'] . " " . $row['lastname'] . " / " . $row['email'];
+                echo "<td>$post_by</td>";
+            }
             
-            echo "<td></td>";
             echo "<td>$date_post" . " - " . "$date_exp</td>";            
             echo "<td>$date_pickup" . " - " . "$date_delivery</td>";
             echo "<td>$addr_pickup" . ", " . "$city_pickup" . ", " . "$state_pickup" . " " . "$zip_pickup</td>";
@@ -70,11 +79,11 @@
         global $table_loads;
 
         if (isset($_POST['create_load'])) {
-            // $post_by = mysqli_real_escape_string($con, $_POST['post_by_ID']);
-            $date_exp = mysqli_real_escape_string($con, $_POST['date_exp']);
+            $post_by = $_SESSION['user_ID'];
+            $date_exp = strtotime(mysqli_real_escape_string($con, $_POST['date_exp']));
 
-            $date_pickup = mysqli_real_escape_string($con, $_POST['date_pickup']);
-            $date_delivery = mysqli_real_escape_string($con, $_POST['date_delivery']);
+            $date_pickup = strtotime(mysqli_real_escape_string($con, $_POST['date_pickup']));
+            $date_delivery = strtotime(mysqli_real_escape_string($con, $_POST['date_delivery']));
 
             $addr_pickup = mysqli_real_escape_string($con, $_POST['addr_pickup']);
             $city_pickup = mysqli_real_escape_string($con, $_POST['city_pickup']);
@@ -96,7 +105,7 @@
             $note = mysqli_real_escape_string($con, $_POST['note']);
     
             $sql = "INSERT INTO $table_loads (
-                -- post_by_ID, 
+                post_by_ID, 
                 date_post, 
                 date_exp, 
                 date_pickup, 
@@ -117,8 +126,8 @@
                 budget,
                 note
                 ) VALUES (
-                    -- '$post_by', 
-                    now(),
+                    '$post_by', 
+                    ".time().",
                     '$date_exp', 
                     '$date_pickup', 
                     '$date_delivery', 
@@ -288,7 +297,7 @@
             $firstname = mysqli_real_escape_string($con, $_POST['firstname']);
             $lastname = mysqli_real_escape_string($con, $_POST['lastname']);
             $phone = mysqli_real_escape_string($con, $_POST['phone']);
-            $role = $_POST['role'];                     
+            // $role = $_POST['role'];                     
             $mc_num = mysqli_real_escape_string($con, $_POST['mc_num']);
                        
             $sql = "INSERT INTO $table_users (
@@ -303,7 +312,7 @@
                     '$firstname', 
                     '$lastname', 
                     '$phone',
-                    '$role',
+                    1,
                     '$mc_num'
                     );";
             $query = mysqli_query($con, $sql);

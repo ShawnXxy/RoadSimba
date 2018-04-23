@@ -26,13 +26,13 @@
         <input type="text" class="form-control" name="mc_num" placeholder="">
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="role">Role *</label>
         <select name="role" required>
             <option value="1">Select Role</option>
             <option value="1">Dispatcher</option>
         </select>
-    </div>
+    </div> -->
 
     <div class="form-group">
         <input type="submit" class="btn btn-success" name="create_dispatcher" value="Create">
