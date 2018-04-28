@@ -22,6 +22,8 @@
     $table_orders = 'orders';
     $table_vehicles = 'vehicles';
     $table_disp_carr = 'dispcarr';
+    $table_trucks_loc = 'truckloc';
+    $table_locations = 'locations';
 
     // USERS
     $sql = "CREATE TABLE IF NOT EXISTS $table_users (
@@ -92,7 +94,16 @@
         dc_ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         dispatcher_ID INT(11) NOT NULL,
         carrier_ID INT(11) NOT NULL
-        );";
+    );";
+    mysqli_query($db, $sql);
+
+    // Truck Location
+    $sql = "CREATE TABLE IF NOT EXISTS $table_trucks_loc (
+        ID INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        v_ID INT(11),
+        loc_ID INT(11),
+        truck_time INT(11)
+    );";
     mysqli_query($db, $sql);
 
     /*************************************

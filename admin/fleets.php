@@ -24,7 +24,7 @@
                         <small>Information about your fleets.</small>
                     </h1>
                     <?php
-                        if ($_SESSION['role'] == 1) {
+                        if ($_SESSION['role'] == 1 || $_SESSION['role'] == 99) {
                             if (isset($_GET['source'])) {
                                 $source = $_GET['source'];
                             } else {
@@ -36,7 +36,10 @@
                                     break;
                                 case 'edit_fleet':
                                     include 'includes/edit_fleet.php';
-                                    break;                       
+                                    break;   
+                                case 'update_loc':
+                                    include 'includes/update_loc.php';
+                                    break;                    
                                 default:
                                     include 'includes/all_fleets.php';
                                     break;

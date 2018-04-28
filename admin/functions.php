@@ -10,7 +10,7 @@
         global $table_users;
 
         // Showing all loads to Dispatchers
-        if ($_SESSION['role'] == 1 || $_SESSION['role'] == 0) {
+        if ($_SESSION['role'] == 1 || $_SESSION['role'] == 0 || $_SESSION['role'] == 99)  {
             $sql = "SELECT * FROM $table_loads ORDER BY date_post DESC;";
             $query = mysqli_query($con, $sql);
         }
@@ -66,6 +66,7 @@
             echo "<td>$note</td>";
             echo "
                 <td>
+                    <a href='loads.php?source=details_load&load_ID=$load_id' class='btn btn-primary'>Details</a>
                     <a href='loads.php?source=edit_load&load_ID=$load_id' class='btn btn-primary'>Edit</a>
                     <a href='loads.php?delete=$load_id' class='btn btn-danger'>Delete</a>
                 </td>
@@ -184,9 +185,11 @@
         global $table_users;
         global $table_vehicles;
         global $table_disp_carr;
+        global $table_trucks_loc;
+        global $table_locations;
 
         $cur_user_ID = $_SESSION['user_ID'];
-        $sql = "SELECT * FROM $table_users JOIN $table_disp_carr ON carrier_ID = $table_users.user_ID WHERE  role = 0 AND dispatcher_ID = $cur_user_ID;";
+        $sql = "SELECT * FROM $table_users JOIN $table_disp_carr ON carrier_ID = $table_users.user_ID WHERE role = 0 OR role = 99 AND dispatcher_ID = $cur_user_ID;";
         $query = mysqli_query($con, $sql);
 
         while ($row = mysqli_fetch_assoc($query)) {
@@ -199,11 +202,10 @@
 
             echo "<tr>";
             echo "<td>$user_id</td>";
-            echo "<td>$lastname</td>";
-            echo "<td>$firstname</td>";
-            echo "<td>$email</td>";
-            echo "<td>$phone</td>";
-
+            echo "<td>$firstname" . " " . "$lastname</td>";
+            echo "<td>$email" . " / " . "$phone</td>";
+            
+            // Getting Vehicle info
             $sql_v = "SELECT * FROM $table_vehicles WHERE user_ID = $user_id;";
             $query_v = mysqli_query($con, $sql_v);
             while ($row_v = mysqli_fetch_assoc($query_v)) {
@@ -212,9 +214,30 @@
                 echo "<td>$v_id" . " / " . "$v_size</td>";
             }
 
+            // Getting location info
+            $sql_loc = "SELECT * FROM $table_vehicles 
+                JOIN $table_disp_carr ON $table_vehicles.user_ID = $table_disp_carr.carrier_ID
+                JOIN $table_trucks_loc ON $table_trucks_loc.v_ID = $table_vehicles.v_ID
+                JOIN $table_locations ON $table_trucks_loc.loc_ID = $table_locations.ID;";       
+            $query_loc = mysqli_query($con, $sql_loc); 
+
+            while ($row_loc = mysqli_fetch_assoc($query_loc)) {
+                $truck_time = date("Y-m-d\TH:i:s\Z", $row_loc['truck_time']);
+                $zip = $row_loc['ZIP'];
+                $lat = $row_loc['lat'];
+                $lon = $row_loc['lon'];
+                $city = $row_loc['city'];
+                $state = $row_loc['state'];
+
+                echo "<td>$truck_time</td>";
+                echo "<td>$city" . ", " . $state . " " . "$zip</td>";
+                echo "<td>$lat" . ", " . "$lon</td>";
+            }
+
             echo "
                 <td>
                     <a href='fleets.php?source=edit_fleet&user_ID=$user_id' class='btn btn-primary'>Edit</a>
+                    <a href='fleets.php?source=update_loc&user_ID=$user_id' class='btn btn-primary'>Update Location</a>
                     <a href='fleets.php?delete=$user_id' class='btn btn-danger'>Delete</a>
                 </td>
                 ";
@@ -368,7 +391,6 @@
             echo "<td>$role</td>";
             echo "<td>$mc_num</td>";
 
-
             echo "
                 <td>
                     <a href='dispatchers.php?source=edit_dispatcher&user_ID=$user_id' class='btn btn-primary'>Edit</a>
@@ -394,5 +416,60 @@
             }
         }
     }
+
+/*********************
+ * 
+ * Update Truck location
+ * 
+ ***********************/
+
+function update_truck_loc() {
+    global $con;
+    global $table_vehicles;
+    global $table_trucks_loc;
+    global $table_disp_carr;
+    global $table_locations;
+
+    if (isset($_GET['user_ID'])) {
+        $edit_user_id = $_GET['user_ID'];
+    }
+    $sql_v = "SELECT * FROM $table_vehicles WHERE user_ID = $edit_user_id;";
+    $query_v = mysqli_query($con, $sql_v);
+    if (!$query_v) {
+        die('Query Failed ! ' . mysqli_error($con));
+    }
+    while ($row_v = mysqli_fetch_assoc($query_v)) {
+        $v_ID = $row_v['v_ID'];
+    }
+
+    if (isset($_POST['update'])) {
+        $truck_time = strtotime(mysqli_real_escape_string($con, $_POST['truck_time']));
+        $truck_city = mysqli_real_escape_string($con, $_POST['truck_city']);
+        $truck_state = mysqli_real_escape_string($con, $_POST['truck_state']);
+        $truck_zip = mysqli_real_escape_string($con, $_POST['truck_zip']);
+
+        if (!empty($truck_zip)) {
+            $sql = "SELECT * FROM $table_locations WHERE ZIP = $truck_zip;";
+            $query = mysqli_query($con, $sql);
+            if (!$query) {
+                die('Query Failed ! ' . mysqli_error($con));
+            }
+            while ($row = mysqli_fetch_assoc($query)) {
+                $loc_ID = $row['ID'];
+            }
+            $sql_update_loc = "UPDATE $table_trucks_loc SET
+                loc_ID = $loc_ID,
+                truck_time = $truck_time
+                WHERE v_ID = $v_ID;";
+            $query_update_loc = mysqli_query($con, $sql_update_loc);
+            if (!$query_update_loc) {
+                die('Query Failed ! ' . mysqli_error($con));
+            } else {
+                echo "<p class='bg-success'>Truck location updated successfully!</p>";
+            }
+        }
+    }
+}
+
 
 ?>

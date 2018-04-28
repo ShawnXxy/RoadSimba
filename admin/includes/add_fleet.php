@@ -1,6 +1,6 @@
 
 <form action="" method="post" enctype="multipart/form-data">
-    <!-- Add User -->
+    <!-- Add Fleet -->
     <?php add_fleet(); ?>
     <div class="form-group">
         <label for="firstname">Firstname</label>

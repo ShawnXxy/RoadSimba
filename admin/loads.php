@@ -28,6 +28,9 @@
                             $source = '';
                         }
                         switch($source) {
+                            case 'details_load':
+                                include "includes/details_load.php";
+                                break;
                             case 'add_load':
                                 include "includes/add_load.php";
                                 break;

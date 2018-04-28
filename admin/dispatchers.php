@@ -24,7 +24,7 @@
                         <small>Information about your dispatchers.</small>
                     </h1>
                     <?php
-                        if ($_SESSION['role'] == 0) {
+                        if ($_SESSION['role'] == 0 || $_SESSION['role'] == 99) {
                             if (isset($_GET['source'])) {
                                 $source = $_GET['source'];
                             } else {

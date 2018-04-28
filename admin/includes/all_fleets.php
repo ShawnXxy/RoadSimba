@@ -1,12 +1,13 @@
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Lastname</th>
-            <th>Firstname</th>
-            <th>Email</th>       
-            <th>Phone</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Contact</th>       
             <th>Vehicle Type / Size</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>GPS</th>
             <th>Action</th>
         </tr>
     </thead>
