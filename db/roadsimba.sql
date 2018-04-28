@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 28, 2018 at 02:48 PM
+-- Generation Time: Apr 28, 2018 at 02:54 PM
 -- Server version: 5.6.34-log
 -- PHP Version: 7.1.5
 
@@ -124,7 +124,8 @@ INSERT INTO `users` (`user_ID`, `email`, `password`, `firstname`, `lastname`, `p
 (1, 'shawnxxy@hotmail.com', 'f43093d060058b338ab9c8e07aad78ae', 'X', 'X', '123456789', 1, '', 1524438057),
 (2, 'x_xiao2_bnu@mail.fhsu.edu', 'f43093d060058b338ab9c8e07aad78ae', 'Shawn', 'Xx', '7854982948', 2, '', 1524446147),
 (4, 'admin@admin', 'f43093d060058b338ab9c8e07aad78ae', 'Admin', 'Admin', '1234567890', 0, '', 1524450661),
-(37, 'fleet@fleet', '', 'test', 'test', '7854989248', 0, '', NULL);
+(37, 'fleet@fleet', '', 'test', 'test', '7854989248', 0, '', NULL),
+(38, 'admin@fhsu', '0cd0cc14971be88ff245ff49b352f260', 'Admin', 'FHSU', '', 99, '', NULL);
 
 -- --------------------------------------------------------
 
@@ -203,7 +204,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `vehicles`
 --
