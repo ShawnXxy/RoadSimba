@@ -15,11 +15,11 @@
         $date_exp = date("Y-m-d\TH:i:s\Z", $row['date_exp']);
         $date_pickup = date("Y-m-d\TH:i:s\Z", $row['date_pickup']);
         $date_delivery = date("Y-m-d\TH:i:s\Z", $row['date_delivery']);
-        $addr_pickup = $row['addr_pickup'];
+        // $addr_pickup = $row['addr_pickup'];
         $city_pickup = $row['city_pickup'];
         $state_pickup = $row['state_pickup'];
         $zip_pickup = $row['zip_pickup'];
-        $addr_delivery = $row['addr_delivery'];
+        // $addr_delivery = $row['addr_delivery'];
         $city_delivery = $row['city_delivery'];
         $state_delivery = $row['state_delivery'];
         $zip_delivery = $row['zip_delivery'];
@@ -38,11 +38,13 @@
         $date_pickup = strtotime(mysqli_real_escape_string($con, $_POST['date_pickup']));
         $date_delivery = strtotime(mysqli_real_escape_string($con, $_POST['date_delivery']));
 
+        $addrNum_pickup = mysqli_real_escape_string($con, $_POST['addrNum_pickup']);
         $addr_pickup = mysqli_real_escape_string($con, $_POST['addr_pickup']);
         $city_pickup = mysqli_real_escape_string($con, $_POST['city_pickup']);
         $state_pickup = mysqli_real_escape_string($con, $_POST['state_pickup']);
         $zip_pickup = mysqli_real_escape_string($con, $_POST['zip_pickup']);
 
+        $addrNum_delivery = mysqli_real_escape_string($con, $_POST['addrNum_delivery']);
         $addr_delivery = mysqli_real_escape_string($con, $_POST['addr_delivery']);
         $city_delivery = mysqli_real_escape_string($con, $_POST['city_delivery']);
         $state_delivery = mysqli_real_escape_string($con, $_POST['state_delivery']);
@@ -61,11 +63,11 @@
             date_exp = '$date_exp', 
             date_pickup = '$date_pickup', 
             date_delivery = '$date_delivery', 
-            addr_pickup = '$addr_pickup', 
+            addr_pickup = '$addrNum_pickup'" . "' '" . "'$addr_pickup', 
             city_pickup = '$city_pickup', 
             state_pickup = '$state_pickup', 
             zip_pickup = '$zip_pickup',
-            addr_delivery = '$addr_delivery', 
+            addr_delivery = '$addrNum_delivery'" . "' '" . "'$addr_delivery', 
             city_delivery = '$city_delivery', 
             state_delivery = '$state_delivery', 
             zip_delivery = '$zip_delivery', 
@@ -107,18 +109,22 @@
 
     <div class="form-group">
         <label for="location_pickup">Pickup Location</label>
-        <input type="text" class="form-control" name="addr_pickup" value="<?php echo $addr_pickup; ?>" required>
-        <input type="text" class="form-control" name="city_pickup" value="<?php echo $city_pickup; ?>" required>
-        <input type="text" class="form-control" name="state_pickup" value="<?php echo $state_pickup; ?>" required>
-        <input type="text" class="form-control" name="zip_pickup" value="<?php echo $zip_pickup; ?>" required>
+        <input type="text" class="form-control" id="autocomplete" placeholder="Enter address here" onFocus="geolocate()"></input>
+        <input type="text" class="form-control" id="street_number" name="addrNum_pickup" placeholder="Street Number" disabled="true">
+        <input type="text" class="form-control" id="route" name="addr_pickup" placeholder="Street Name" value="" disabled="true">
+        <input type="text" class="form-control" id="locality" name="city_pickup" value="<?php echo $city_pickup; ?>" disabled="true">
+        <input type="text" class="form-control" id="administrative_area_level_1" name="state_pickup" value="<?php echo $state_pickup; ?>" disabled="true">
+        <input type="text" class="form-control" id="postal_code" name="zip_pickup" value="<?php echo $zip_pickup; ?>" disabled="true">
     </div>
 
     <div class="form-group">
         <label for="location_pickup">Delivery Location</label>
-        <input type="text" class="form-control" name="addr_delivery" value="<?php echo $addr_delivery; ?>" required>
-        <input type="text" class="form-control" name="city_delivery" value="<?php echo $city_delivery; ?>" required>
-        <input type="text" class="form-control" name="state_delivery" value="<?php echo $state_delivery; ?>" required>
-        <input type="text" class="form-control" name="zip_delivery" value="<?php echo $zip_delivery; ?>" required>
+        <input type="text" class="form-control" id="autocomplete" placeholder="Enter address here" onFocus="geolocate()"></input>
+        <input type="text" class="form-control" id="street_number" name="addrNum_delivery" placeholder="Street Number" disabled="true">
+        <input type="text" class="form-control" id="route" name="addr_delivery" placeholder="Street Number" value="" disabled="true">
+        <input type="text" class="form-control" id="locality" name="city_delivery" value="<?php echo $city_delivery; ?>" disabled="true">
+        <input type="text" class="form-control" id="administrative_area_level_1" name="state_delivery" value="<?php echo $state_delivery; ?>" disabled="true">
+        <input type="text" class="form-control" id="postal_code"  name="zip_delivery" value="<?php echo $zip_delivery; ?>" disabled="true">
     </div>
 
     <div class="form-group">
@@ -148,3 +154,61 @@
         <input type="submit" class="btn btn-success" name="edit_load" value="Confirm">
     </div>
 </form>
+<script>
+    var placeSearch, autocomplete;
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            (document.getElementById('autocomplete')),
+            {types: ['geocode']}
+        );
+        // When the user selects an address from the dropdown, populate the address fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        for (var component in componentForm) {
+            document.getElementById(component).value = '';
+            document.getElementById(component).disabled = false;
+        }
+
+        // Get each component of the address from the place details and fill the corresponding field on the form.
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+            var val = place.address_components[i][componentForm[addressType]];
+            document.getElementById(addressType).value = val;
+            }
+        }
+    }
+
+      // Bias the autocomplete object to the user's geographical location, as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoVe8-O3eYkHkyc-f9VzQXh57Rp0QDNeg&libraries=places&callback=initAutocomplete" async defer>
+</script>

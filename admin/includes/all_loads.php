@@ -13,27 +13,26 @@
         $query = mysqli_query($con, $sql);
     }
 
+    $return_arr = array();
+
     while ($row = mysqli_fetch_assoc($query)) {
         $load_id = $row['load_ID'];
         $addr_pickup = $row['addr_pickup'];
         $city_pickup = $row['city_pickup'];
         $state_pickup = $row['state_pickup'];
         $zip_pickup = $row['zip_pickup'];
-    }
 
-    // Pickup Location
-    $sql_pickup = "SELECT * FROM $table_locations WHERE ZIP = $zip_pickup;";
-    $query_pickup = mysqli_query($con, $sql_pickup);
-    if (!$query_pickup) {
-        die('Query Failed ! ' . mysqli_error($con));
-    }
-    $return_arr = array();
-    while ($row_pickup = mysqli_fetch_assoc($query_pickup)) {
-        $row_array['lat'] = $row_pickup['lat'];
-        $row_array['lon'] = $row_pickup['lon'];
-
-        array_push($return_arr, $row_array);
-    }
+        // Pickup Location
+        $sql_pickup = "SELECT * FROM $table_locations WHERE ZIP = $zip_pickup;";
+        $query_pickup = mysqli_query($con, $sql_pickup);
+        while ($row_pickup = mysqli_fetch_assoc($query_pickup)) {
+            $row_array['lat'] = $row_pickup['lat'];
+            $row_array['lon'] = $row_pickup['lon'];
+    
+            array_push($return_arr, $row_array);
+        }
+    }    
+    
     $result = json_encode($return_arr);
     // var_dump($result);
 ?>
