@@ -44,7 +44,7 @@
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                 return function() {
                     infowindow = new google.maps.InfoWindow({
-                        content: locations[i]['city'] + ', ' + locations[i]['state']
+                        content: locations[i]['city'] + ', ' + locations[i]['state'] + " " + locations[i]['ZIP']
                     });
                     infowindow.open(map, marker);
                 }
