@@ -35,7 +35,7 @@
         });
 
         for (i = 0; i < locations.length; i++) {
-            var lat = 
+            
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lon']),
                 map: map
