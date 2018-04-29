@@ -10,7 +10,7 @@
             <th>Load Type / Vehicle Size</th>
             <th>Miles</th>
             <th>Pieces / Weight</th>
-            <th>Price</th>
+            <th>Price ($)</th>
             <th>Note</th>
             <th>Action</th>
         </tr>

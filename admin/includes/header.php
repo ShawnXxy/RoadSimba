@@ -36,6 +36,8 @@
 
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
+    <!-- Gmaps -->
+    <link href="css/gmaps.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
