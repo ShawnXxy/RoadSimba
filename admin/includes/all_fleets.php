@@ -39,13 +39,12 @@
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lon']),
                 map: map
-
             });
 
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                 return function() {
                     infowindow = new google.maps.InfoWindow({
-                        content: locations[i][3]
+                        content: locations[i]['city'] + ', ' + locations[i]['state']
                     });
                     infowindow.open(map, marker);
                 }
