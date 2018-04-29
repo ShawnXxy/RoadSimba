@@ -104,9 +104,3 @@ src="https://www.google.com/maps/embed/v1/directions?origin=<?php echo $zip_pick
 <div class="form-group">
     <input type="submit" class="btn btn-success" name="bid" value="Bid">
 </div>
-    <script>
-        var latP = <?php echo $lat_pickup; ?>;
-        var lonP = <?php echo $lon_pickup; ?>;
-        var latD = <?php echo $lat_delivery; ?>;
-        var lonD = <?php echo $lon_delivery; ?>;
-    </script>
