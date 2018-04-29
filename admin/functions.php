@@ -86,11 +86,13 @@
             $date_pickup = strtotime(mysqli_real_escape_string($con, $_POST['date_pickup']));
             $date_delivery = strtotime(mysqli_real_escape_string($con, $_POST['date_delivery']));
 
+            $addrNum_pickup = mysqli_real_escape_string($con, $_POST['addrNum_pickup']);
             $addr_pickup = mysqli_real_escape_string($con, $_POST['addr_pickup']);
             $city_pickup = mysqli_real_escape_string($con, $_POST['city_pickup']);
             $state_pickup = mysqli_real_escape_string($con, $_POST['state_pickup']);
             $zip_pickup = mysqli_real_escape_string($con, $_POST['zip_pickup']);
 
+            $addrNum_delivery = mysqli_real_escape_string($con, $_POST['addrNum_delivery']);
             $addr_delivery = mysqli_real_escape_string($con, $_POST['addr_delivery']);
             $city_delivery = mysqli_real_escape_string($con, $_POST['city_delivery']);
             $state_delivery = mysqli_real_escape_string($con, $_POST['state_delivery']);
@@ -132,11 +134,11 @@
                     '$date_exp',
                     '$date_pickup',
                     '$date_delivery',
-                    '$addr_pickup',
+                    '$addrNum_pickup'" . " " . "'$addr_pickup',
                     '$city_pickup',
                     '$state_pickup',
                     '$zip_pickup',
-                    '$addr_delivery',
+                    '$addrNum_delivery'" . " " . "'$addr_delivery',
                     '$city_delivery',
                     '$state_delivery',
                     '$zip_delivery',
