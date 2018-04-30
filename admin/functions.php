@@ -220,7 +220,7 @@
             $sql_loc = "SELECT * FROM $table_vehicles 
                 JOIN $table_disp_carr ON $table_vehicles.user_ID = $table_disp_carr.carrier_ID
                 JOIN $table_trucks_loc ON $table_trucks_loc.v_ID = $table_vehicles.v_ID
-                JOIN $table_locations ON $table_trucks_loc.loc_ID = $table_locations.ID;";       
+                JOIN $table_locations ON $table_trucks_loc.loc_ID = $table_locations.ID;";     
             $query_loc = mysqli_query($con, $sql_loc); 
 
             while ($row_loc = mysqli_fetch_assoc($query_loc)) {
@@ -275,6 +275,7 @@
                     '$phone',
                     0
                     );";
+                    var_dump($sql_u);
             $query_u = mysqli_query($con, $sql_u);
 
             $carrier_ID = mysqli_insert_id($con);
@@ -449,27 +450,26 @@ function update_truck_loc() {
         $truck_city = mysqli_real_escape_string($con, $_POST['truck_city']);
         $truck_state = mysqli_real_escape_string($con, $_POST['truck_state']);
         $truck_zip = mysqli_real_escape_string($con, $_POST['truck_zip']);
-
-        if (!empty($truck_zip)) {
-            $sql = "SELECT * FROM $table_locations WHERE ZIP = $truck_zip;";
-            $query = mysqli_query($con, $sql);
-            if (!$query) {
-                die('Query Failed ! ' . mysqli_error($con));
-            }
-            while ($row = mysqli_fetch_assoc($query)) {
-                $loc_ID = $row['ID'];
-            }
-            $sql_update_loc = "UPDATE $table_trucks_loc SET
-                loc_ID = $loc_ID,
-                truck_time = $truck_time
-                WHERE v_ID = $v_ID;";
-            $query_update_loc = mysqli_query($con, $sql_update_loc);
-            if (!$query_update_loc) {
-                die('Query Failed ! ' . mysqli_error($con));
-            } else {
-                echo "<p class='bg-success'>Truck location updated successfully!</p>";
-            }
+        
+        $sql = "SELECT * FROM $table_locations WHERE ZIP = $truck_zip;";
+        $query = mysqli_query($con, $sql);
+        if (!$query) {
+            die('Query Failed ! ' . mysqli_error($con));
         }
+        while ($row = mysqli_fetch_assoc($query)) {
+            $loc_ID = $row['ID'];
+        }
+        $sql_update_loc = "UPDATE $table_trucks_loc SET
+            loc_ID = $loc_ID,
+            truck_time = $truck_time
+            WHERE v_ID = $v_ID;";
+        $query_update_loc = mysqli_query($con, $sql_update_loc);
+        if (!$query_update_loc) {
+            die('Query Failed ! ' . mysqli_error($con));
+        } else {
+            echo "<p class='bg-success'>Truck location updated successfully!</p>";
+        }
+        
     }
 }
 

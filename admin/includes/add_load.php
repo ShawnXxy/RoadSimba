@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group">
-        <label for="location_pickup">Delivery Location</label>
+        <label for="location_delivery">Delivery Location</label>
         <input type="text" class="form-control" id="autocomplete" placeholder="Enter address here" onFocus="geolocate()"></input>
         <input type="text" class="form-control" id="street_number" name="addrNum_delivery" placeholder="Street Number" disabled="true">
         <input type="text" class="form-control" id="route" name="addr_delivery" placeholder="Street Name" disabled="true">
@@ -99,8 +99,8 @@
         for (var i = 0; i < place.address_components.length; i++) {
             var addressType = place.address_components[i].types[0];
             if (componentForm[addressType]) {
-            var val = place.address_components[i][componentForm[addressType]];
-            document.getElementById(addressType).value = val;
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
             }
         }
     }
