@@ -4,9 +4,9 @@
      *  Config database
      *
      *********************************/
-    DEFINE('DB_USERNAME', 'root'); // shawnxxy
-    DEFINE('DB_PASSWORD', 'root'); // XXy@4592995
-    DEFINE('DB_HOST', 'localhost'); // 107.180.12.114
+    DEFINE('DB_USERNAME', 'x_xiao2_bnu@shawnxxy'); // shawnxxy
+    DEFINE('DB_PASSWORD', 'XXy@@4592995'); // XXy@4592995
+    DEFINE('DB_HOST', 'shawnxxy.mysql.database.azure.com'); // 107.180.12.114
     DEFINE('DB_DATABASE', 'roadsimba');
 
     $db = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
